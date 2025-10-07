@@ -19,48 +19,20 @@ set more off
 
 * Set working directory to the location of this .do file
 * This works on any computer as long as the .dta file is in the same folder
-cd "`c(pwd)'"
+* Method 1: Uncomment and manually set the path to where your files are located
+* cd "/path/to/your/files"
 
-* Load the dataset
+* Method 2: Or, before running this .do file, use Stata's File menu to
+* "Change Working Directory" to the folder containing both files
+
+* Load the dataset (assumes .dta file is in current working directory)
 use "PetersDraft.dta", clear
 
 ********************************************************************************
-* VARIABLE LABELS
+* VARIABLE LABELS AND VALUE LABELS
 ********************************************************************************
-* Note: Variable labels are already embedded in the .dta file from Python script
-* The following are applied for documentation and can be re-run if needed:
-
-label variable year "Year"
-label variable unemp_rate "Unemployment Rate (%, December)"
-label variable lfpr "Labor Force Participation Rate (%, December)"
-label variable med_income "Real Median Household Income (2024 dollars)"
-label variable gini "Gini Index of Income Inequality"
-label variable pce_capita "Real Personal Consumption Expenditure per Capita (dollars)"
-label variable life_expect "Life Expectancy at Birth (years)"
-label variable poverty_rate "Official Poverty Rate (%, all people)"
-label variable decade "Decade"
-label variable econ_era "Economic Era"
-label variable unemp_cat "Unemployment Category"
-
-********************************************************************************
-* VALUE LABELS
-********************************************************************************
-
-* Economic Era (ordinal/nominal)
-label define era_lbl 1 "Pre-WWII/WWII (< 1946)" ///
-                     2 "Post-War Boom (1946-1972)" ///
-                     3 "Stagflation/Reagan (1973-1990)" ///
-                     4 "Modern Growth (1991-2007)" ///
-                     5 "Great Recession Recovery (2008-2019)" ///
-                     6 "COVID Era (2020+)"
-label values econ_era era_lbl
-
-* Unemployment Category (ordinal)
-label define unemp_lbl 1 "Low (< 4%)" ///
-                       2 "Moderate (4-6%)" ///
-                       3 "High (6-8%)" ///
-                       4 "Very High (8%+)"
-label values unemp_cat unemp_lbl
+* Note: All variable labels and value labels are already embedded in the
+* PetersDraft.dta file. No need to redefine them here.
 
 ********************************************************************************
 * DESCRIPTIVE STATISTICS - INTERVAL/RATIO VARIABLES
