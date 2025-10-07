@@ -17,8 +17,9 @@
 clear all
 set more off
 
-* Set working directory (update this path as needed)
-* cd "/Users/tuckerpeters/SimpleFred"
+* Set working directory to the location of this .do file
+* This works on any computer as long as the .dta file is in the same folder
+cd "`c(pwd)'"
 
 * Load the dataset
 use "PetersDraft.dta", clear
