@@ -1,0 +1,83 @@
+{
+  "generated_at": "2025-10-05T16:48:19Z",
+  "series_metadata": [
+    {
+      "series_id": "UNRATE",
+      "frequency": "Monthly",
+      "frequency_short": "M",
+      "observation_start": "1948-01-01",
+      "observation_end": "2025-08-01",
+      "title": "Unemployment Rate",
+      "units": "Percent",
+      "seasonal_adjustment": "Seasonally Adjusted",
+      "notes": "The unemployment rate represents the number of unemployed as a percentage of the labor force. Labor force data are restricted to people 16 years of age and older, who currently reside in 1 of the 50 states or the District of Columbia, who do not reside in institutions (e.g., penal and mental facilities, homes for the aged), and who are not on active duty in the Armed Forces.\r\n\r\nThis rate is also defined as the U-3 measure of labor underutilization.\r\n\r\nThe series comes from the 'Current Population Survey (Household Survey)'\r\n\r\nThe source code is: LNS14000000"
+    },
+    {
+      "series_id": "CIVPART",
+      "frequency": "Monthly",
+      "frequency_short": "M",
+      "observation_start": "1948-01-01",
+      "observation_end": "2025-08-01",
+      "title": "Labor Force Participation Rate",
+      "units": "Percent",
+      "seasonal_adjustment": "Seasonally Adjusted",
+      "notes": "The series comes from the 'Current Population Survey (Household Survey)'\r\nThe source code is: LNS11300000\r\n\r\nThe Labor Force Participation Rate is defined by the Current Population Survey (CPS) as “the number of people in the labor force as a percentage of the civilian noninstitutional population […] the participation rate is the percentage of the population that is either working or actively looking for work.” \r\n\r\nThe Labor Force Participation Rate is collected in the CPS and published by the BLS. It is provided on a monthly basis, so this data is used in part by macroeconomists as an initial economic indicator of current labor market trends. The labor force participation rate helps government agencies, financial markets, and researchers gauge the overall health of the economy. \r\n\r\nNote that long-run changes in labor force participation may reflect secular economic trends that are unrelated to the overall health of the economy. For instance, demographic changes such as the aging of population can lead to a secular increase of exits from the labor force, shrinking the labor force and decreasing the labor force participation rate. \r\n\r\nFor more information, see:\r\nU.S. Bureau of Labor Statistics, CES Overview (https://www.bls.gov/web/empsit/cesprog.htm)\r\nU.S. Bureau of Labor Statistics, Concepts and Definitions (CPS) (https://www.bls.gov/cps/definitions.htm#lfpr)"
+    },
+    {
+      "series_id": "MEHOINUSA672N",
+      "frequency": "Annual",
+      "frequency_short": "A",
+      "observation_start": "1984-01-01",
+      "observation_end": "2024-01-01",
+      "title": "Real Median Household Income in the United States",
+      "units": "2024 C-CPI-U Dollars",
+      "seasonal_adjustment": "Not Seasonally Adjusted",
+      "notes": "Income in 2024 C-CPI-U (2000-2024) and R-CPI-U-RS (pre-2000) adjusted dollars."
+    },
+    {
+      "series_id": "SIPOVGINIUSA",
+      "frequency": "Annual",
+      "frequency_short": "A",
+      "observation_start": "1963-01-01",
+      "observation_end": "2023-01-01",
+      "title": "GINI Index for the United States",
+      "units": "Index",
+      "seasonal_adjustment": "Not Seasonally Adjusted",
+      "notes": "Gini index measures the extent to which the distribution of income or consumption expenditure among individuals or households within an economy deviates from a perfectly equal distribution. A Lorenz curve plots the cumulative percentages of total income received against the cumulative number of recipients, starting with the poorest individual or household. The Gini index measures the area between the Lorenz curve and a hypothetical line of absolute equality, expressed as a percentage of the maximum area under the line. Thus a Gini index of 0 represents perfect equality, while an index of 100 implies perfect inequality.\n\nData are based on primary household survey data obtained from government statistical agencies and World Bank country departments. For more information and methodology, please see PovcalNet (http://iresearch.worldbank.org/PovcalNet/index.htm).\n\nSource Indicator: SI.POV.GINI\n\nWorld Bank collection of development indicators, compiled from officially recognized international sources. It presents the most current and accurate global development data available and includes national, regional, and global estimates. The World Bank labels these annual series, but several observations are missing."
+    },
+    {
+      "series_id": "A794RC0A052NBEA",
+      "frequency": "Annual",
+      "frequency_short": "A",
+      "observation_start": "1929-01-01",
+      "observation_end": "2024-01-01",
+      "title": "Personal consumption expenditures per capita",
+      "units": "Dollars",
+      "seasonal_adjustment": "Not Seasonally Adjusted",
+      "notes": "BEA Account Code: A794RC\n\nFor more information about this series, please see http://www.bea.gov/national/."
+    },
+    {
+      "series_id": "SPDYNLE00INUSA",
+      "frequency": "Annual",
+      "frequency_short": "A",
+      "observation_start": "1960-01-01",
+      "observation_end": "2023-01-01",
+      "title": "Life Expectancy at Birth, Total for the United States",
+      "units": "Number of Years",
+      "seasonal_adjustment": "Not Seasonally Adjusted",
+      "notes": "Life expectancy at birth indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.\n\nDerived from male and female life expectancy at birth from sources such as: (1) United Nations Population Division. World Population Prospects, (2) United Nations Statistical Division. Population and Vital Statistics Report (various years), (3) Census reports and other statistical publications from national statistical offices, (4) Eurostat: Demographic Statistics, (5) Secretariat of the Pacific Community: Statistics and Demography Program, and (6) U.S. Census Bureau: International Database.\n\nSource Indicator: SP.DYN.LE00.IN"
+    },
+    {
+      "series_id": "CENSUS_HISTPOV2_POV_RATE_ALL_PEOPLE",
+      "frequency": "Annual",
+      "frequency_short": "A",
+      "observation_start": null,
+      "observation_end": null,
+      "title": "Official Poverty Rate (All People)",
+      "units": "Percent",
+      "seasonal_adjustment": "Not Seasonally Adjusted",
+      "notes": "U.S. Census Historical Poverty Tables (histpov2); filtered for 'All people'."
+    }
+  ],
+  "notes": "Frequencies are as reported by FRED metadata or defined for Census. Merged CSV preserves native frequencies; expect NA between lower-frequency observations. Consider aligning to a common frequency in downstream analysis. Each series has a corresponding _PCT_CHANGE column showing the percentage change from the previous available observation, automatically handling different reporting frequencies (e.g., monthly vs. annual)."
+}

@@ -1,0 +1,54 @@
+2.2 Stata data set. Compile a data set in Stata format (.dta) that you could use as part of an analysis
+for your research project. The data set should contain these elements:
+• File name is YourLastNameDraft.dta
+• A total of at least 5 variables
+• Each variable should include
+--variable labels
+--value labels for numeric variables that are nominal or ordinal (not including case ID numbers).
+• There should be a consistent unit of analysis across all variables, meaning the rows in the data set
+should all be the same type of unit. For example, each row should be an individual person if
+you’re working with survey data; or a state if you have state-level data; and so on. Don’t
+combine different types of units of analysis into a single data set.
+• All variables should be properly encoded and formatted so one can obtain meaningful results
+when running appropriate Stata analysis commands that we’re learning in class.
+2.3 Stata .do file. Include a proper .do file, accompanying your .dta file, with these elements:
+• File name is YourLastNameDraft.do
+• An abstract at the top that follows the format of the example we discussed in class on 9/23. (Feel
+free to include additional items in the abstract if you’d like to provide more detail.)
+• Code to attach variable labels to each variable.**
+• Code to attach value labels to values for nominal or ordinal variables.**
+• Code to run appropriate commands to produce tabular summaries (for nominal and ordinal
+variables) or descriptive statistics (for interval and ratio variables).
+• Code to produce at least 1 appropriate data visualization from the techniques we’ve learned.
+**Note: If your file already contains these because your original source attached them then
+simply include a comment note in the .do file saying that.
+GOVT 301 Prof. Manna
+Fall 2025
+2
+2.4 Codebook file. This file provides written documentation so readers can understand the contents of
+the data set before beginning to analyze the data. Set up the codebook with these sections and elements.
+• Save the file as a Word document.
+• File name is YourLastNameCodebookDraft.docx.
+• Include page numbers.
+• Overview section: Include these elements:
+--Your name
+--Date
+--Your GOVT 301 section
+--AI disclosure statement: Describe how you used AI, following the guidance in section 2.1, or
+attest that you did not use AI to develop the data set or elements of the codebook.
+--A brief, clearly written statement (approximately 2-4 sentences) that describes the data set.
+There should be enough detail that a person would understand in a broad sense what to expect
+when they open the data set to use it.
+--Optional: Any additional notes you think would be useful to clarify at the start.
+• Data sources section: Provide documentation of the original sources and links to the places
+where you found the raw data. Also, if you went to a website and had to do certain steps to
+extract the data from the site (i.e., run some sort of query or a set of queries), describe those steps
+here. Basically, you want to provide details so a person could retrace all your steps and find the
+original data you found.
+• Variables section: List the variables one by one and include:
+--variable name
+--variable label
+--basic descriptive statistics (for interval and ratio variables) or tabular summaries (for nominal
+and ordinal variables) for each variable. An easy way to do this is to run the Stata command
+codebook for all your variables. Then copy the results of that into your document and clean up
+the formatting where it might be cluttered
