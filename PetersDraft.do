@@ -39,18 +39,18 @@ use "PetersDraft.dta", clear
 ********************************************************************************
 
 display _newline(2)
-display "=" * 80
+display "================================================================================"
 display "DESCRIPTIVE STATISTICS: CONTINUOUS VARIABLES"
-display "=" * 80
+display "================================================================================"
 
 * Summary statistics for all continuous variables
 summarize year unemp_rate lfpr med_income gini pce_capita life_expect poverty_rate
 
 * Detailed statistics
 display _newline(2)
-display "-" * 80
+display "--------------------------------------------------------------------------------"
 display "DETAILED STATISTICS BY VARIABLE"
-display "-" * 80
+display "--------------------------------------------------------------------------------"
 
 foreach var of varlist unemp_rate lfpr med_income gini pce_capita life_expect poverty_rate {
     display _newline(1)
@@ -63,9 +63,9 @@ foreach var of varlist unemp_rate lfpr med_income gini pce_capita life_expect po
 ********************************************************************************
 
 display _newline(2)
-display "=" * 80
+display "================================================================================"
 display "TABULATIONS: CATEGORICAL VARIABLES"
-display "=" * 80
+display "================================================================================"
 
 * Decade distribution
 display _newline(1)
@@ -149,6 +149,6 @@ scatter gini med_income if !missing(gini) & !missing(med_income), ///
 graph export "gini_vs_income_scatter.png", replace width(1200)
 
 display _newline(2)
-display "=" * 80
+display "================================================================================"
 display "Analysis complete! Graphs saved to working directory."
-display "=" * 80
+display "================================================================================"
