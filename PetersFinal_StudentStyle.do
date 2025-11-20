@@ -4,94 +4,43 @@
 * Date:     November 2025
 * Purpose:  Analysis of U.S. Economic and Social Indicators
 *
-* This do-file loads economic data from FRED and merges it with General Social
-* Survey data, then creates some derived variables and looks at patterns over time.
+* ABSTRACT:
+* This do-file analyzes the relationship between long-term macroeconomic
+* trends (FRED data) and social indicators (General Social Survey data) to
+* examine how economic conditions may affect social outcomes. The analysis
+* covers the period from 1972-2024 and includes variables such as unemployment,
+* life expectancy, income inequality, and employment indicators. Key derived
+* variables include unemployment categories, an economic stress index, and
+* decade classifications to facilitate temporal analysis.
+*
 ===============================================================================*/
 
 clear all
 set more off
-insheet using "population_impact_datasets.csv", clear comma
 
-* this is just to verify if it works
+* ============================================================================
+* Load pre-merged FRED + GSS data
+* ============================================================================
+* The Python script (fred.py) automatically loads GSS data, aggregates key
+* social variables by year, merges with FRED economic indicators, and outputs
+* a unified Stata dataset. This script loads the pre-merged dataset and adds
+* analytical variables and labels required for the assignment.
+
+use "population_impact_datasets.dta", clear
+
+display "Loaded merged FRED + GSS data"
 describe
 display "Loaded data with `=_N' rows"
-
-* Parsing the date column so its properly set up
-generate year_date = date(date, "YMD")
-format year_date %td
-generate year = year(year_date)
-
-* We have monthly data for some series and annual for others so we need to figure out how to translate it to annual 
-
-collapse (mean) unemployment_rate labor_force_participation real_median_hh_income /// *COME BACK TO / CHECK*
-         gini_index real_pce_per_capita life_expectancy_at_birth ///
-         cpi_inflation federal_min_wage real_median_rent total_population, by(year)
-
-display "After collapsing to annual: `=_N' rows"
-list year unemployment_rate life_expectancy_at_birth in 1/5
-
-tempfile fred_yearly
-save `fred_yearly'
-
-* Load GSS
-use "gss7224_r2.dta", clear
-display "GSS file loaded"
-
-* Look for the year variable *dk if else works but hopefully python style if else works*
-capture describe year
-if _rc == 0 {
-    display "Found 'year' variable"
-} else { 
-    capture describe YEAR
-    if _rc == 0 {
-        rename YEAR year
-        display "Renamed YEAR to year"
-    }
-}
-
-* Create some flags for variables we want to aggregate
-* Union membership - did respondent say yes to union?
-generate in_union = (union == 1) if !missing(union)
-
-* Are they employed? 
-generate working = (wrkstat == 1) if !missing(wrkstat)
-
-* Do they have a college degree? 
-generate college = (degree >= 3) if !missing(degree)
-
-collapse (mean) in_union working college (count) n_respondents = in_union, by(year)
-
-* Convert to percentages 
-replace in_union = in_union * 100
-replace working = working * 100
-replace college = college * 100
-
-* Rename so they're clearer
-rename in_union gss_union_pct
-rename working gss_work_pct
-rename college gss_college_pct
-
-display "GSS data aggregated by year"
-list year gss_union_pct gss_work_pct gss_college_pct in 1/5
-
-* Save this!!
-tempfile gss_yearly
-save `gss_yearly'
-
-* Now merge the two datasets together
-use `fred_yearly', clear
-merge 1:1 year using `gss_yearly', generate(merge_check)
-* merge_check should tell us which years have both datasets
-
-* merge checl
-tabulate merge_check
-display "Merge complete"
+list year unemployment_rate life_expectancy_at_birth gss_union_pct in 1/10
 
 * ============================================================================
-* Creating some new vars
+* Creating derived variables using generate command
 * ============================================================================
+* Assignment requirement: At least 2 substantively meaningful variables created
+* using generate and/or recode command
 
 * Variable 1: Unemployment category - is unemployment low, medium, high?
+* Uses generate and replace to create ordinal categorical variable
 generate unemp_category = .
 replace unemp_category = 1 if unemployment_rate < 4
 replace unemp_category = 2 if unemployment_rate >= 4 & unemployment_rate < 6
@@ -102,12 +51,13 @@ label define unemp_cat 1 "Low" 2 "Moderate" 3 "Elevated" 4 "High"
 label values unemp_category unemp_cat
 
 * Variable 2: Economic stress index
-* Try to combine unemployment, inflation, and inequality into one number
-* Higher = more stress
+* Combines unemployment, inflation, and inequality into a single composite measure
+* This is a meaningful variable for analysis that reflects economic conditions
+* Higher values indicate greater economic stress
 generate econ_stress = unemployment_rate + (cpi_inflation/10) + (gini_index * 10)
 label variable econ_stress "Economic Stress Index"
 
-* Variable 3: Decade
+* Variable 3: Decade (helper variable for analysis)
 generate decade = floor(year/10)*10
 label define decade_labels 1940 "1940s" 1950 "1950s" 1960 "1960s" 1970 "1970s" ///
                            1980 "1980s" 1990 "1990s" 2000 "2000s" 2010 "2010s" 2020 "2020s"
