@@ -483,6 +483,14 @@ def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_MET
     merged_for_stata = merged.dropna(axis=1, how='all')
     logging.info(f"Dropped {len(merged.columns) - len(merged_for_stata.columns)} completely empty columns")
 
+    # Add lowercase aliases for common variables to support both naming conventions
+    # This allows Stata scripts to use either UNEMPLOYMENT_RATE or unemployment_rate
+    merged_for_stata['unemployment_rate'] = merged_for_stata['UNEMPLOYMENT_RATE']
+    merged_for_stata['cpi_inflation'] = merged_for_stata['CPI_INFLATION']
+    merged_for_stata['gini_index'] = merged_for_stata['GINI_INDEX']
+    merged_for_stata['life_expectancy_at_birth'] = merged_for_stata['LIFE_EXPECTANCY_AT_BIRTH']
+    merged_for_stata['real_median_hh_income'] = merged_for_stata['REAL_MEDIAN_HH_INCOME']
+
     # Write Stata .dta file
     logging.info(f"Writing Stata .dta → {OUTPUT_DTA}")
     merged_for_stata.to_stata(OUTPUT_DTA, write_index=False)
