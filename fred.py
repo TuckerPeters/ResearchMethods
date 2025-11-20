@@ -187,7 +187,7 @@ def gss_aggregate_by_year(gss_dta_path: str) -> Tuple[pd.DataFrame, dict]:
     """
     try:
         logging.info(f"Loading GSS data from {gss_dta_path}...")
-        gss = pd.read_stata(gss_dta_path)
+        gss = pd.read_stata(gss_dta_path, convert_categoricals=False)
         logging.info(f"GSS loaded: {gss.shape[0]} respondents, {gss.shape[1]} variables")
 
         # Identify year variable (might be 'year' or 'YEAR')
