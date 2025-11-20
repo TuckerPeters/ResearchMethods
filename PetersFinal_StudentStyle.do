@@ -42,10 +42,10 @@ list year unemployment_rate life_expectancy_at_birth gss_union_pct in 1/10
 * Variable 1: Unemployment category - is unemployment low, medium, high?
 * Uses generate and replace to create ordinal categorical variable
 generate unemp_category = .
-replace unemp_category = 1 if unemployment_rate < 4
-replace unemp_category = 2 if unemployment_rate >= 4 & unemployment_rate < 6
-replace unemp_category = 3 if unemployment_rate >= 6 & unemployment_rate < 8
-replace unemp_category = 4 if unemployment_rate >= 8
+replace unemp_category = 1 if UNEMPLOYMENT_RATE < 4
+replace unemp_category = 2 if UNEMPLOYMENT_RATE >= 4 & UNEMPLOYMENT_RATE < 6
+replace unemp_category = 3 if UNEMPLOYMENT_RATE >= 6 & UNEMPLOYMENT_RATE < 8
+replace unemp_category = 4 if UNEMPLOYMENT_RATE >= 8
 
 label define unemp_cat 1 "Low" 2 "Moderate" 3 "Elevated" 4 "High"
 label values unemp_category unemp_cat
@@ -54,7 +54,7 @@ label values unemp_category unemp_cat
 * Combines unemployment, inflation, and inequality into a single composite measure
 * This is a meaningful variable for analysis that reflects economic conditions
 * Higher values indicate greater economic stress
-generate econ_stress = unemployment_rate + (cpi_inflation/10) + (gini_index * 10)
+generate econ_stress = UNEMPLOYMENT_RATE + (CPI_INFLATION/10) + (GINI_INDEX * 10)
 label variable econ_stress "Economic Stress Index"
 
 * Variable 3: Decade (helper variable for analysis)
@@ -70,16 +70,16 @@ display "Created 3 new variables: unemp_category, econ_stress, decade"
 * ============================================================================
 
 label variable year "Year"
-label variable unemployment_rate "Unemployment Rate (%)"
-label variable labor_force_participation "Labor Force Participation (%)"
-label variable real_median_hh_income "Real Median HH Income"
-label variable gini_index "Gini Index (Inequality)"
-label variable real_pce_per_capita "Real PCE Per Capita"
-label variable life_expectancy_at_birth "Life Expectancy (years)"
-label variable cpi_inflation "CPI Inflation Index"
-label variable federal_min_wage "Federal Minimum Wage"
-label variable real_median_rent "Real Median Rent"
-label variable total_population "Total Population"
+label variable UNEMPLOYMENT_RATE "Unemployment Rate (%)"
+label variable LABOR_FORCE_PARTICIPATION "Labor Force Participation (%)"
+label variable REAL_MEDIAN_HH_INCOME "Real Median HH Income"
+label variable GINI_INDEX "Gini Index (Inequality)"
+label variable REAL_PCE_PER_CAPITA "Real PCE Per Capita"
+label variable LIFE_EXPECTANCY_AT_BIRTH "Life Expectancy (years)"
+label variable CPI_INFLATION "CPI Inflation Index"
+label variable FEDERAL_MIN_WAGE "Federal Minimum Wage"
+label variable REAL_MEDIAN_RENT "Real Median Rent"
+label variable TOTAL_POPULATION "Total Population"
 label variable gss_union_pct "% in Union (GSS)"
 label variable gss_work_pct "% Working (GSS)"
 label variable gss_college_pct "% College Grad (GSS)"
@@ -105,12 +105,12 @@ display "============================================================"
 display "SUMMARY STATISTICS FOR KEY VARIABLES"
 display "============================================================"
 
-summarize unemployment_rate life_expectancy_at_birth real_median_hh_income ///
-          gini_index econ_stress
+summarize UNEMPLOYMENT_RATE LIFE_EXPECTANCY_AT_BIRTH REAL_MEDIAN_HH_INCOME ///
+          GINI_INDEX econ_stress
 
 * Look at each variable separately with more details
-foreach var of varlist unemployment_rate labor_force_participation ///
-                      life_expectancy_at_birth real_median_hh_income {
+foreach var of varlist UNEMPLOYMENT_RATE LABOR_FORCE_PARTICIPATION ///
+                      LIFE_EXPECTANCY_AT_BIRTH REAL_MEDIAN_HH_INCOME {
     display _newline(1)
     display "--- `var' ---"
     summarize `var', detail
@@ -132,7 +132,7 @@ display _newline(2)
 display "Creating graphs..."
 
 * Graph 1: Unemployment over time
-twoway (line unemployment_rate year, lwidth(medium) lcolor(navy)), ///
+twoway (line UNEMPLOYMENT_RATE year, lwidth(medium) lcolor(navy)), ///
     title("U.S. Unemployment Rate (1948-2025)") ///
     ytitle("Unemployment Rate (%)") ///
     xtitle("Year") ///
@@ -142,7 +142,7 @@ twoway (line unemployment_rate year, lwidth(medium) lcolor(navy)), ///
 graph export "unemployment.png", replace width(1000)
 
 * Graph 2: Life expectancy trend
-twoway (line life_expectancy_at_birth year if !missing(life_expectancy_at_birth), ///
+twoway (line LIFE_EXPECTANCY_AT_BIRTH year if !missing(LIFE_EXPECTANCY_AT_BIRTH), ///
         lwidth(medium) lcolor(green)), ///
     title("U.S. Life Expectancy at Birth") ///
     ytitle("Life Expectancy (years)") ///
@@ -152,7 +152,7 @@ twoway (line life_expectancy_at_birth year if !missing(life_expectancy_at_birth)
 graph export "life_expectancy.png", replace width(1000)
 
 * Graph 3: Gini index (inequality) over time
-twoway (line gini_index year if !missing(gini_index), ///
+twoway (line GINI_INDEX year if !missing(GINI_INDEX), ///
         lwidth(medium) lcolor(red)), ///
     title("Income Inequality (Gini Index)") ///
     ytitle("Gini Index") ///
@@ -162,7 +162,7 @@ twoway (line gini_index year if !missing(gini_index), ///
 graph export "gini_index.png", replace width(1000)
 
 * Graph 4: Box plot of unemployment by decade
-graph box unemployment_rate, over(decade) ///
+graph box UNEMPLOYMENT_RATE, over(decade) ///
     title("Unemployment Distribution by Decade") ///
     ytitle("Unemployment Rate (%)") ///
     graphregion(color(white)) ///
@@ -180,9 +180,9 @@ twoway (line econ_stress year if !missing(econ_stress), ///
 graph export "economic_stress.png", replace width(1000)
 
 * Graph 6: Income and life expectancy together
-twoway (line real_median_hh_income year if !missing(real_median_hh_income), ///
+twoway (line REAL_MEDIAN_HH_INCOME year if !missing(REAL_MEDIAN_HH_INCOME), ///
         lwidth(medium) lcolor(blue) yaxis(1)) ///
-       (line life_expectancy_at_birth year if !missing(life_expectancy_at_birth), ///
+       (line LIFE_EXPECTANCY_AT_BIRTH year if !missing(LIFE_EXPECTANCY_AT_BIRTH), ///
         lwidth(medium) lcolor(green) lpattern(dash) yaxis(2)), ///
     title("Income vs. Life Expectancy") ///
     ytitle("Real Median HH Income", axis(1)) ///
