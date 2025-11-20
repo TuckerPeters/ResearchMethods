@@ -173,6 +173,93 @@ def fred_series_df(series_id: str, col_name: Optional[str] = None) -> Tuple[pd.D
 
 
 # -----------------------
+# GSS data extraction and aggregation
+# -----------------------
+
+def gss_aggregate_by_year(gss_dta_path: str) -> Tuple[pd.DataFrame, dict]:
+    """
+    Load GSS data and aggregate key social variables to annual level.
+    Extracts: union membership, employment status, educational attainment.
+
+    Returns (df, meta) where:
+      df -> columns ['year', 'gss_union_pct', 'gss_work_pct', 'gss_college_pct']
+      meta -> metadata about the GSS dataset
+    """
+    try:
+        logging.info(f"Loading GSS data from {gss_dta_path}...")
+        gss = pd.read_stata(gss_dta_path)
+        logging.info(f"GSS loaded: {gss.shape[0]} respondents, {gss.shape[1]} variables")
+
+        # Identify year variable (might be 'year' or 'YEAR')
+        year_col = None
+        for candidate in ['year', 'YEAR', 'Year']:
+            if candidate in gss.columns:
+                year_col = candidate
+                break
+
+        if year_col is None:
+            raise ValueError("No 'year' or 'YEAR' column found in GSS data")
+
+        # Create binary flags for aggregation
+        gss['in_union'] = (gss.get('union') == 1).astype(float)  # Union membership
+        gss['working'] = (gss.get('wrkstat') == 1).astype(float)  # Employed
+        gss['college'] = (gss.get('degree', 0) >= 3).astype(float)  # College degree+
+
+        # Aggregate to annual level
+        agg_dict = {
+            'in_union': 'mean',
+            'working': 'mean',
+            'college': 'mean',
+        }
+
+        gss_annual = gss.groupby(year_col)[['in_union', 'working', 'college']].agg(agg_dict).reset_index()
+        gss_annual.rename(columns={year_col: 'year'}, inplace=True)
+
+        # Convert to percentages and rename
+        gss_annual['gss_union_pct'] = gss_annual['in_union'] * 100
+        gss_annual['gss_work_pct'] = gss_annual['working'] * 100
+        gss_annual['gss_college_pct'] = gss_annual['college'] * 100
+
+        # Keep only year and percentage columns
+        gss_annual = gss_annual[['year', 'gss_union_pct', 'gss_work_pct', 'gss_college_pct']]
+        gss_annual['year'] = gss_annual['year'].astype(int)
+
+        meta = {
+            "series_id": "GSS_AGGREGATED",
+            "frequency": "Annual",
+            "frequency_short": "A",
+            "observation_start": str(int(gss_annual['year'].min())),
+            "observation_end": str(int(gss_annual['year'].max())),
+            "title": "General Social Survey - Aggregated Indicators",
+            "units": "Percent (%)",
+            "seasonal_adjustment": "Not Seasonally Adjusted",
+            "notes": "Aggregated from individual respondent-level GSS data. Union: % members; Working: % employed; College: % with bachelor's degree or higher.",
+        }
+
+        logging.info(f"GSS aggregated to {len(gss_annual)} years: {meta['observation_start']} → {meta['observation_end']}")
+        return gss_annual, meta
+
+    except FileNotFoundError:
+        logging.warning(f"GSS file not found at {gss_dta_path}. Skipping GSS data.")
+        return pd.DataFrame(columns=['year', 'gss_union_pct', 'gss_work_pct', 'gss_college_pct']), {
+            "series_id": "GSS_AGGREGATED",
+            "frequency": "Annual",
+            "frequency_short": "A",
+            "observation_start": None,
+            "observation_end": None,
+            "title": "General Social Survey - Aggregated Indicators (NOT LOADED)",
+            "units": "Percent (%)",
+            "notes": "GSS file not found. Skipped."
+        }
+    except Exception as e:
+        logging.error(f"Error loading/aggregating GSS data: {e}")
+        return pd.DataFrame(columns=['year', 'gss_union_pct', 'gss_work_pct', 'gss_college_pct']), {
+            "series_id": "GSS_AGGREGATED",
+            "notes": f"Error: {str(e)}"
+        }
+
+
+# -----------------------
 # Census poverty
 # -----------------------
 
@@ -256,10 +343,11 @@ def census_poverty_rate_df() -> Tuple[pd.DataFrame, dict]:
 # Main build
 # -----------------------
 
-def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_META_JSON) -> None:
+def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_META_JSON, gss_dta_path: str = "gss7224_r2.dta") -> None:
     """
     Fetch all series at their native highest frequency, outer-join on 'date', and write CSV.
-    Also writes a JSON sidecar with metadata and detected frequencies.
+    Also merges GSS aggregated social indicators by year.
+    Writes a JSON sidecar with metadata and detected frequencies.
     """
     logging.info("Starting dataset collection...")
 
@@ -313,36 +401,71 @@ def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_MET
         f"{census_meta.get('observation_start')} → {census_meta.get('observation_end')}"
     )
 
-    # Merge all series on date (outer join), preserving native frequencies
-    logging.info("Merging datasets on 'date' (outer join)…")
-    merged = None
+    # Fetch GSS aggregated data (annual)
+    logging.info(f"[{len(fred_specs)+2}/{len(fred_specs)+2}] Loading and aggregating GSS data")
+    gss_df, gss_meta = gss_aggregate_by_year(gss_dta_path)
+    if not gss_df.empty:
+        dfs.append(gss_df)
+        meta_list.append(gss_meta)
+        logging.info(
+            f"  • GSS frequency: {gss_meta.get('frequency')} "
+            f"({gss_meta.get('frequency_short')}); range: "
+            f"{gss_meta.get('observation_start')} → {gss_meta.get('observation_end')}"
+        )
+    else:
+        logging.warning("GSS data not available; continuing with FRED and Census data only.")
+
+    # Merge FRED/Census data on date; then merge GSS data on year
+    logging.info("Merging date-based datasets (FRED/Census) on 'date' (outer join)…")
+
+    # Separate GSS data from FRED/Census data
+    gss_included = False
+    gss_data = None
+    fred_census_dfs = []
+
     for d in dfs:
+        if 'year' in d.columns and 'date' not in d.columns:
+            gss_data = d
+            gss_included = True
+        else:
+            fred_census_dfs.append(d)
+
+    # Merge FRED/Census datasets on date
+    merged = None
+    for d in fred_census_dfs:
         if merged is None:
             merged = d
         else:
             merged = pd.merge(merged, d, on="date", how="outer")
 
     if merged is None or merged.empty:
-        logging.error("No data fetched; nothing to write.")
+        logging.error("No FRED/Census data fetched; nothing to write.")
         sys.exit(2)
 
-    # Sort, standardize date format
+    # Extract year from date and merge with GSS data
     merged["date"] = pd.to_datetime(merged["date"], errors="coerce")
+    merged["year"] = merged["date"].dt.year.astype("Int64")  # Use nullable integer type
     merged = merged.sort_values("date").reset_index(drop=True)
     merged["date"] = merged["date"].dt.strftime("%Y-%m-%d")
 
+    # Merge with GSS data on year if available
+    if gss_included and gss_data is not None and not gss_data.empty:
+        logging.info("Merging GSS aggregated data on 'year'…")
+        gss_data["year"] = gss_data["year"].astype("Int64")
+        merged = pd.merge(merged, gss_data, on="year", how="left")
+
     # Add percentage change columns for each series
     logging.info("Calculating percentage changes for each series…")
-    value_columns = [col for col in merged.columns if col != "date"]
-    
+    value_columns = [col for col in merged.columns if col not in ("date", "year")]
+
     for col in value_columns:
         pct_col = f"{col}_PCT_CHANGE"
         # Calculate percent change from previous non-null value
         # This handles different frequencies (monthly vs annual) automatically
         merged[pct_col] = merged[col].pct_change() * 100
-        
-    # Reorder columns: date, then pairs of (value, pct_change) for each series
-    column_order = ["date"]
+
+    # Reorder columns: date, year, then pairs of (value, pct_change) for each series
+    column_order = ["date", "year"]
     for col in value_columns:
         column_order.append(col)
         column_order.append(f"{col}_PCT_CHANGE")
