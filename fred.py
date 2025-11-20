@@ -76,6 +76,7 @@ FRED_OBS_URL = "https://api.stlouisfed.org/fred/series/observations"
 FRED_SERIES_URL = "https://api.stlouisfed.org/fred/series"
 
 OUTPUT_CSV = "./population_impact_datasets.csv"
+OUTPUT_DTA = "./population_impact_datasets.dta"
 OUTPUT_META_JSON = "./population_impact_datasets_meta.json"
 
 REQ_TIMEOUT = 25  # seconds
@@ -462,7 +463,10 @@ def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_MET
         pct_col = f"{col}_PCT_CHANGE"
         # Calculate percent change from previous non-null value
         # This handles different frequencies (monthly vs annual) automatically
-        merged[pct_col] = merged[col].pct_change() * 100
+        pct_change = merged[col].pct_change() * 100
+        # Replace infinity values with NaN (these occur when previous value was 0)
+        pct_change = pct_change.replace([float('inf'), float('-inf')], float('nan'))
+        merged[pct_col] = pct_change
 
     # Reorder columns: date, year, then pairs of (value, pct_change) for each series
     column_order = ["date", "year"]
@@ -474,6 +478,14 @@ def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_MET
     # Write CSV
     logging.info(f"Writing CSV → {output_path}")
     merged.to_csv(output_path, index=False, quoting=csv.QUOTE_MINIMAL)
+
+    # Prepare for Stata export: drop completely empty columns
+    merged_for_stata = merged.dropna(axis=1, how='all')
+    logging.info(f"Dropped {len(merged.columns) - len(merged_for_stata.columns)} completely empty columns")
+
+    # Write Stata .dta file
+    logging.info(f"Writing Stata .dta → {OUTPUT_DTA}")
+    merged_for_stata.to_stata(OUTPUT_DTA, write_index=False)
 
     # Write metadata sidecar
     logging.info(f"Writing metadata JSON → {meta_out}")
