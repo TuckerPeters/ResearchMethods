@@ -4,7 +4,7 @@
 """
 population_impact_datasets.py
 
-Pulls 7 population-impact datasets and writes a single, merged CSV at each series'
+Pulls 17 population-impact datasets and writes a single, merged CSV at each series'
 native (maximum available) frequency. It does NOT resample; merge is an outer join
 on the date index, so lower-frequency series will have NA between observations.
 
@@ -13,10 +13,20 @@ Datasets (source → series_id / endpoint):
   2) FRED: Labor Force Participation Rate (CIVPART)           [Monthly]
   3) FRED: Real Median Household Income (MEHOINUSA672N)       [Annual]
   4) FRED: Gini Index of Income Inequality (SIPOVGINIUSA)     [Annual]
-  5) FRED: Real PCE per Capita (A794RC0A052NBEA)              [Annual or Quarterly depending on series definition on FRED]
+  5) FRED: Real PCE per Capita (A794RC0A052NBEA)              [Annual]
   6) U.S. Census: Official Poverty Rate (Historical – histpov2)[Annual]
   7) Life Expectancy at Birth (proxy via World Bank on FRED)   [Annual]
      FRED composite code: SPDYNLE00INUSA (USA life expectancy)
+  8) FRED: Real GDP per Capita (A939RX0A052NBEA)              [Annual]
+  9) FRED: Inflation - CPI-U (CPIAUCSL)                       [Monthly]
+ 10) FRED: Federal Minimum Wage (FEDMINNFRWG)                 [Annual]
+ 11) FRED: Union Membership Rate (LNS11300000)                [Annual]
+ 12) FRED: Educational Attainment - % Bachelor's+ (B23006_023E) [Annual]
+ 13) FRED: Violent Crime Rate (VCRIME)                        [Annual]
+ 14) FRED: Health Insurance Coverage Rate (S2701_C03_001E)     [Annual]
+ 15) FRED: Real Government Social Spending Per Capita (A085RC0A052NBEA) [Annual]
+ 16) FRED: Real Median Rent (CUSR0000SEHA)                    [Monthly]
+ 17) FRED: Total Population (POPTHM)                          [Monthly]
 
 Notes:
 - FRED API key is read from the environment variable FRED_API_KEY.
@@ -254,12 +264,24 @@ def build_and_save_csv(output_path: str = OUTPUT_CSV, meta_out: str = OUTPUT_MET
     logging.info("Starting dataset collection...")
 
     fred_specs: List[Dict[str, str]] = [
+        # Original 7 series
         {"id": "UNRATE",            "col": "UNEMPLOYMENT_RATE"},
         {"id": "CIVPART",           "col": "LABOR_FORCE_PARTICIPATION"},
         {"id": "MEHOINUSA672N",     "col": "REAL_MEDIAN_HH_INCOME"},
         {"id": "SIPOVGINIUSA",      "col": "GINI_INDEX"},
         {"id": "A794RC0A052NBEA",   "col": "REAL_PCE_PER_CAPITA"},
         {"id": "SPDYNLE00INUSA",    "col": "LIFE_EXPECTANCY_AT_BIRTH"},  # World Bank via FRED
+        # New 10 series (Fall 2025)
+        {"id": "A939RX0A052NBEA",   "col": "REAL_GDP_PER_CAPITA"},
+        {"id": "CPIAUCSL",          "col": "CPI_INFLATION"},
+        {"id": "FEDMINNFRWG",       "col": "FEDERAL_MIN_WAGE"},
+        {"id": "LNS11300000",       "col": "UNION_MEMBERSHIP_RATE"},
+        {"id": "B23006_023E",       "col": "EDUCATION_BACHELORS_PLUS"},
+        {"id": "VCRIME",            "col": "VIOLENT_CRIME_RATE"},
+        {"id": "S2701_C03_001E",    "col": "HEALTH_INSURANCE_COVERAGE"},
+        {"id": "A085RC0A052NBEA",   "col": "GOVT_SOCIAL_SPENDING_PER_CAP"},
+        {"id": "CUSR0000SEHA",      "col": "REAL_MEDIAN_RENT"},
+        {"id": "POPTHM",            "col": "TOTAL_POPULATION"},
     ]
 
     dfs: List[pd.DataFrame] = []

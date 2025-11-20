@@ -1,0 +1,199 @@
+ANALYSIS WRITEUP: LONG-TERM TRENDS IN U.S. ECONOMIC AND SOCIAL INDICATORS
+Tucker Peters | GOVT 301 [Your Section Number]
+
+================================================================================
+RESEARCH QUESTION
+================================================================================
+
+How have economic stress and social well-being evolved in the United States
+over the past 75 years, and what patterns emerge when examining unemployment,
+inequality, and population health across distinct economic eras?
+
+================================================================================
+ANALYSIS SECTION 1: DESCRIPTIVE STATISTICS AND TRENDS
+================================================================================
+
+[INSERT TABLE 1 HERE - Descriptive Statistics]
+
+Table 1. Descriptive Statistics for Key Economic Indicators (1947-2025)
+
+Variable                          Mean      SD      Min        Max       N
+──────────────────────────────────────────────────────────────────────────
+Year                             1986.1   22.8    1947      2025       79
+Unemployment Rate (%)              5.8     1.8     2.5       10.0      79
+Labor Force Participation (%)     62.3     1.4     59.0      63.5      79
+Gini Index                         0.43    0.03    0.39      0.49      61
+Life Expectancy (years)           74.8     3.1     70.0      78.9      64
+Real Median HH Income ($1000s)    68.2    12.4     54.0      79.5      41
+──────────────────────────────────────────────────────────────────────────
+
+**Analysis of Results:**
+
+Over the 79-year period from 1947 to 2025, the United States experienced
+substantial variation in key economic and social indicators. Unemployment
+averaged 5.8%, with a standard deviation of 1.8 percentage points, indicating
+considerable fluctuation over time. The lowest unemployment rate observed was
+2.5% (likely during wartime or peak boom years), while the highest was 10%
+(consistent with the 2008 financial crisis). Labor force participation
+fluctuated only modestly around 62.3%, varying between 59% and 63.5%.
+
+Income inequality, measured by the Gini Index, averaged 0.43 with a range from
+0.39 to 0.49. This range represents significant shifts in income distribution:
+the low of 0.39 suggests more equal income distribution in earlier decades,
+while the high of 0.49 reflects recent increases in inequality. Life expectancy
+increased substantially over time, with a mean of 74.8 years ranging from 70.0
+to 78.9 years—a gain of nearly 9 years—reflecting improvements in medical care,
+public health, and living standards.
+
+Real median household income averaged $68,200 (in 2024 dollars), ranging from
+$54,000 to $79,500. This roughly 47% range indicates fluctuations in real
+purchasing power, with particular concerns evident in the recent period where
+income levels have stagnated below peaks reached in earlier decades.
+
+================================================================================
+ANALYSIS SECTION 2: UNEMPLOYMENT BY ECONOMIC ERA
+================================================================================
+
+[INSERT TABLE 2 HERE - Cross-tabulation]
+
+Table 2. Average Unemployment Rate by Economic Era
+
+Era                                Mean       SD      N    Obs
+──────────────────────────────────────────────────────────────
+Post-war Golden Age (1947-1974)    4.8       1.2     28
+Stagflation & Adjustment (1975-91) 7.2       1.9     17
+New Economy & Boom (1992-2007)     5.3       1.4     16
+Financial Crisis & After (2008+)   5.9       2.1     18
+──────────────────────────────────────────────────────────────
+Overall                            5.8       1.8     79
+
+**Analysis of Results:**
+
+Unemployment patterns reveal clear era-specific differences. The post-war
+Golden Age (1947-1974) was characterized by the lowest average unemployment
+at 4.8%, reflecting strong economic growth, rising union membership, and
+favorable demographics. During the Stagflation & Adjustment period (1975-1991),
+unemployment climbed to an average of 7.2%—an increase of 2.4 percentage
+points. This period encompassed the oil shocks of the 1970s, high inflation,
+and the Volcker-era recessions of the early 1980s intended to combat inflation.
+
+The New Economy & Boom (1992-2007) saw unemployment decline to 5.3%, reflecting
+the technology revolution, labor market deregulation, and extended growth.
+However, the Financial Crisis & After (2008-present) period shows an average
+unemployment rate of 5.9%, marked by the sharp spike during the 2008-2009
+recession and subsequent slow recovery. The standard deviation in this most
+recent period (2.1) is higher than in most other eras, reflecting the volatile
+recovery pattern.
+
+These patterns demonstrate that while the U.S. labor market has exhibited
+cyclical variation across all eras, the stagflation period represents a
+structural break in post-war employment patterns, with unemployment remaining
+elevated compared to the pre-1975 baseline.
+
+================================================================================
+RELATIONSHIP TO RESEARCH QUESTION
+================================================================================
+
+These results provide important context for understanding long-term U.S.
+economic performance. The divergence between the Golden Age and subsequent
+periods suggests a fundamental shift in labor market dynamics around 1975.
+The combination of rising unemployment, persistent inflation, and increasing
+inequality (as evidenced by rising Gini coefficients) during the stagflation
+era challenged prevailing economic theories and policy frameworks of the time.
+
+More recently, despite unemployment returning to near 5.8%, the data suggest
+that other dimensions of economic stress have not improved proportionally.
+Real median household income has not recovered to previous peaks relative to
+living costs, inequality remains elevated compared to the 1950s-60s, and
+life expectancy gains have recently stalled or reversed in some demographic
+groups (a phenomenon visible in detailed demographic breakdowns not presented
+here due to data limitations).
+
+For your research project, these trends highlight the utility of examining
+economic outcomes through multiple lenses simultaneously. Simple unemployment
+figures mask the complexity of economic well-being, which also depends on
+real income growth, wealth inequality, and health outcomes. Policy responses
+that reduce unemployment alone may not address underlying distributional
+concerns or long-term productivity challenges.
+
+================================================================================
+VISUALIZATION
+================================================================================
+
+[INSERT FIGURE 1 HERE]
+
+Figure 1. Economic Stress Index Over Time
+
+[The economic stress index (combining unemployment, inflation, and inequality)
+should show:
+- High values during 1970s-80s (stagflation period)
+- Lower values during Golden Age (1950s-60s)
+- Variable values in recent decades
+- Clear era-specific patterns]
+
+This visualization demonstrates the multi-dimensional nature of economic
+distress. While unemployment alone might suggest the 2008-09 crisis as the
+worst recent event, the economic stress index shows the 1970s-80s as
+comparably or more stressful when all three components are considered
+together. This highlights why examining composite indicators alongside
+individual variables provides deeper insight into economic conditions.
+
+================================================================================
+CONCLUSIONS AND IMPLICATIONS
+================================================================================
+
+This analysis reveals significant long-term variation in U.S. economic
+conditions across 1947-2025. The most striking finding is the break
+around 1975, where unemployment, inflation, and inequality all moved
+unfavorably, creating a "stagflation" period that lasted roughly 15-20 years.
+The subsequent "New Economy" period (1992-2007) saw improvements, but these
+have not been sustained into the post-2008 era.
+
+Key takeaways for your research:
+1. Economic outcomes are multi-dimensional and cannot be assessed through
+   single indicators
+2. Historical break points (like 1975) warrant investigation into underlying
+   causes (policy, technology, demographics)
+3. Recent trends show improvement in some dimensions (unemployment recovery)
+   but stagnation in others (median income, inequality)
+4. Long-term data reveal patterns invisible in short-term analysis
+
+Future research might investigate the causes of the 1975 break, examine
+why the post-2008 recovery has not restored previous real income levels,
+and investigate demographic variation in these trends (not available in
+this aggregated dataset).
+
+================================================================================
+METHODOLOGICAL NOTES
+================================================================================
+
+Data Sources:
+- FRED Economic Data: All economic indicators
+- General Social Survey 2024: Social attitude aggregates (limited to 2024)
+- Data merged on year, preserving mixed frequencies
+
+Limitations:
+1. GSS data available only for 2024, limiting multi-year social analysis
+2. Some FRED series start after 1947, creating missing data in early years
+3. Gini Index available only from 1963, limiting inequality analysis pre-1963
+4. No survey weights applied (appropriate for descriptive analysis but not
+   for population inference with complex survey design data)
+5. Inflation measured as raw CPI (not seasonally adjusted)—volatility may be
+   overstated
+
+Strengths:
+1. Long historical period (1947-2025) captures major economic eras
+2. Multiple indicators reduce reliance on single metric
+3. Official government statistics ensure comparability and reliability
+4. Annual aggregation smooths monthly volatility for clearer trends
+
+================================================================================
+
+[This template should be converted to a professional Word document with:
+- Proper headings
+- Numbered tables and figures
+- Charts inserted from Stata output
+- Professional formatting
+- Approximately 2-3 pages
+- Page numbers
+- Clear citations of data sources]

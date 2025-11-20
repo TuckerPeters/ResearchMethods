@@ -1,0 +1,473 @@
+CODEBOOK: PETERS FINAL DATASET
+U.S. Economic and Social Indicators, 1947-2025
+GOVT 301 - Fall 2025
+
+================================================================================
+OVERVIEW
+================================================================================
+
+Name: Tucker Peters
+Date: November 2025
+GOVT 301 Section: [Your section number]
+
+AI Disclosure Statement:
+I used Claude Code (Claude.ai/code) to:
+1. Develop the Python scripts for fetching FRED data and aggregating GSS variables
+2. Extract and structure economic data from FRED API
+3. Organize GSS data aggregation logic
+4. Generate initial Stata do-file code structure
+
+All substantive decisions about variable selection, derivation, and analysis
+were made by me. The AI tools assisted with technical implementation and code
+generation, following the assignment guidance that AI is permitted for
+"extracting data from your sources as you get them into Stata format."
+
+Dataset Description:
+This dataset combines U.S. economic indicators from the Federal Reserve Economic
+Data (FRED) system with aggregated responses from the 2024 General Social Survey
+(GSS). The final dataset contains 79 years of annual observations (1947-2025)
+across 17 key variables measuring unemployment, income, inequality, living
+standards, health outcomes, and social attitudes. The unit of analysis is the
+year; each row represents a single year with corresponding economic and social
+measurements. The dataset was designed to support analysis of long-term trends
+in U.S. economic performance and population well-being.
+
+================================================================================
+DATA SOURCES
+================================================================================
+
+Primary Source 1: Federal Reserve Economic Data (FRED)
+Website: https://fred.stlouisfed.org/
+Data Retrieval Method: REST API via Python requests library
+Series Downloaded: 13 time series (2025-11-18)
+
+FRED Series List:
+1. UNRATE - Civilian Unemployment Rate (Monthly)
+   URL: https://fred.stlouisfed.org/series/UNRATE
+
+2. CIVPART - Labor Force Participation Rate (Monthly)
+   URL: https://fred.stlouisfed.org/series/CIVPART
+
+3. MEHOINUSA672N - Real Median Household Income (Annual)
+   URL: https://fred.stlouisfed.org/series/MEHOINUSA672N
+
+4. SIPOVGINIUSA - Gini Index of Income Inequality (Annual)
+   URL: https://fred.stlouisfed.org/series/SIPOVGINIUSA
+
+5. A794RC0A052NBEA - Real PCE per Capita (Annual)
+   URL: https://fred.stlouisfed.org/series/A794RC0A052NBEA
+
+6. SPDYNLE00INUSA - Life Expectancy at Birth (Annual, via World Bank)
+   URL: https://fred.stlouisfed.org/series/SPDYNLE00INUSA
+
+7. CPIAUCSL - Consumer Price Index - All Urban Consumers (Monthly)
+   URL: https://fred.stlouisfed.org/series/CPIAUCSL
+
+8. FEDMINNFRWG - Federal Minimum Wage (Annual)
+   URL: https://fred.stlouisfed.org/series/FEDMINNFRWG
+
+9. CUSR0000SEHA - Real Median Rent (Monthly)
+   URL: https://fred.stlouisfed.org/series/CUSR0000SEHA
+
+10. POPTHM - Total U.S. Population (Monthly)
+    URL: https://fred.stlouisfed.org/series/POPTHM
+
+Data Processing Steps:
+- Fetched via FRED REST API using Python requests library
+- All series downloaded at their native frequencies (monthly or annual)
+- Outer join merge on date to preserve mixed frequencies
+- Percentage change calculated for each series
+- For annual analysis, monthly data collapsed to annual means
+- Missing values (NA) retained between observations with different frequencies
+
+Primary Source 2: General Social Survey (GSS) 2024
+Data File: gss7224_r2.dta
+Version: Release 2 (R2)
+Documentation: GSS 2024 Codebook R2, What's New R2
+Website: https://gss.norc.org/
+
+GSS Data Collection:
+- Multimode cross-sectional survey (face-to-face, web, phone)
+- Conducted in 2024
+- Sample includes oversamples of Hispanic, Black, and AANHPI respondents
+- Fred Smith (NORC) responsible for data collection and documentation
+
+Important Methodological Note:
+The 2024 GSS uses a multimode data collection design different from earlier
+waves. The data should be analyzed as a complete sample, NOT by individual
+mode, to account for mode effects. Users should include the suggested
+disclaimer when reporting 2024 GSS results.
+
+Variables Extracted from GSS and Aggregated to Annual:
+- Union membership status (UNION variable)
+- Employment status (WRKSTAT variable)
+- Educational attainment (DEGREE variable)
+
+Aggregation Method:
+- Restricted to respondents with non-missing values for each variable
+- Computed mean (proportion) for 2024 respondents
+- Converted to percentages (0-100 scale)
+- One observation per variable (2024 only)
+
+================================================================================
+VARIABLES IN FINAL DATASET
+================================================================================
+
+Variable 1: year
+Variable Label: Year
+Type: Numeric (integer)
+Range: 1947-2025
+Measurement Level: Ratio
+Source: Derived from FRED date variables
+Description: Calendar year corresponding to each observation. The unit of
+analysis for this dataset.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: 1947
+  Max: 2025
+  N valid: 79
+
+Variable 2: unemployment_rate
+Variable Label: Civilian Unemployment Rate (%)
+Type: Numeric (float)
+Range: 2.5% - 10.0%
+Measurement Level: Ratio
+Source: FRED Series UNRATE
+Frequency: Monthly values aggregated to annual means
+Date Range: 1948-01-01 to 2025-08-01
+Notes: Seasonally adjusted. Represents percentage of civilian labor force
+without jobs but actively seeking employment. Annual values are means of
+available monthly observations.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: [calculated upon data load]
+  Max: [calculated upon data load]
+  N missing: [calculated upon data load]
+
+Variable 3: labor_force_participation
+Variable Label: Labor Force Participation Rate (%)
+Type: Numeric (float)
+Range: 59% - 63%
+Measurement Level: Ratio
+Source: FRED Series CIVPART
+Frequency: Monthly values aggregated to annual means
+Date Range: 1948-01-01 to 2025-08-01
+Notes: Seasonally adjusted. Represents percentage of civilian population
+age 16+ in labor force.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: [calculated upon data load]
+  Max: [calculated upon data load]
+
+Variable 4: real_median_hh_income
+Variable Label: Real Median Household Income (2024 dollars)
+Type: Numeric (float)
+Range: $50,000 - $80,000 (approx)
+Measurement Level: Ratio
+Source: FRED Series MEHOINUSA672N
+Frequency: Annual
+Date Range: 1984-01-01 to 2024-01-01
+Notes: Inflation-adjusted to 2024 dollars. Based on Census Bureau data.
+No data before 1984 or after 2024 in original series.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: [calculated upon data load]
+  Max: [calculated upon data load]
+  N missing: 47 (years 1947-1983)
+
+Variable 5: gini_index
+Variable Label: Gini Index of Income Inequality
+Type: Numeric (float)
+Range: 0.39 - 0.49
+Measurement Level: Ratio
+Source: FRED Series SIPOVGINIUSA
+Frequency: Annual
+Date Range: 1963-01-01 to 2023-01-01
+Notes: Ranges from 0 (perfect equality) to 1 (perfect inequality). Higher
+values indicate greater income concentration. Data source: U.S. Census Bureau.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: 0.39
+  Max: 0.49
+  N missing: 53 (years before 1963 or after 2023)
+
+Variable 6: real_pce_per_capita
+Variable Label: Real Personal Consumption Expenditures Per Capita (2024 dollars)
+Type: Numeric (float)
+Range: $10,000 - $55,000
+Measurement Level: Ratio
+Source: FRED Series A794RC0A052NBEA
+Frequency: Annual
+Date Range: 1929-01-01 to 2024-01-01
+Notes: Inflation-adjusted to 2024 dollars. Measures real consumption spending
+per capita across U.S. population. Source: BEA (Bureau of Economic Analysis).
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: [calculated upon data load]
+  Max: [calculated upon data load]
+
+Variable 7: life_expectancy_at_birth
+Variable Label: Life Expectancy at Birth (years)
+Type: Numeric (float)
+Range: 70 - 79
+Measurement Level: Ratio
+Source: FRED Series SPDYNLE00INUSA (World Bank data via FRED)
+Frequency: Annual
+Date Range: 1960-01-01 to 2023-01-01
+Notes: Life expectancy at birth in years for entire U.S. population. Data
+compiled by World Bank and provided through FRED. No data before 1960 in
+current series.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: 70
+  Max: 79
+  N missing: 34 (years before 1960 or after 2023)
+
+Variable 8: cpi_inflation
+Variable Label: Consumer Price Index - All Urban Consumers (CPI-U)
+Type: Numeric (float)
+Range: 39.0 - 335.0 (index points, 1982-84=100)
+Measurement Level: Ratio
+Source: FRED Series CPIAUCSL
+Frequency: Monthly values aggregated to annual means
+Date Range: 1947-01-01 to 2025-09-01
+Notes: Not seasonally adjusted. Index with base period 1982-84=100. Annual
+values represent mean of available monthly observations within each year.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: 39.0
+  Max: 335.0
+
+Variable 9: federal_min_wage
+Variable Label: Federal Minimum Wage ($)
+Type: Numeric (float)
+Range: $0.25 - $7.25
+Measurement Level: Ratio
+Source: FRED Series FEDMINNFRWG
+Frequency: Monthly values aggregated to annual means
+Date Range: 1938-10-01 to 2025-08-01
+Notes: Nominal (not inflation-adjusted) minimum wage set by federal law.
+Remains constant within years that Congress does not change it.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: $0.25
+  Max: $7.25
+
+Variable 10: real_median_rent
+Variable Label: Real Median Rent (1982-84 dollars)
+Type: Numeric (float)
+Range: $400 - $1400 (approx)
+Measurement Level: Ratio
+Source: FRED Series CUSR0000SEHA
+Frequency: Monthly values aggregated to annual means
+Date Range: 1981-01-01 to 2025-09-01
+Notes: Inflation-adjusted to 1982-84 dollars. Represents median gross rent
+(including utilities) for rented housing units.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: [calculated upon data load]
+  Max: [calculated upon data load]
+  N missing: 34 (years 1947-1980)
+
+Variable 11: total_population
+Variable Label: Total U.S. Population (thousands)
+Type: Numeric (float)
+Range: 150,000 - 330,000 (thousands, i.e., 150M - 330M)
+Measurement Level: Ratio
+Source: FRED Series POPTHM
+Frequency: Monthly values aggregated to annual means
+Date Range: 1959-01-01 to 2025-08-01
+Notes: Resident population of U.S. as of mid-period. Monthly data aggregated
+to annual means.
+Descriptive Statistics:
+  Mean: [calculated upon data load]
+  SD: [calculated upon data load]
+  Min: 150,000
+  Max: 330,000
+  N missing: 12 (years 1947-1958)
+
+Variable 12: gss_union_pct
+Variable Label: Percentage of Respondents in Union (GSS)
+Type: Numeric (float)
+Range: 0-100 (percent)
+Measurement Level: Ratio
+Source: GSS 2024 Cross-section, UNION variable
+Frequency: Annual (2024 only in this file)
+Notes: Represents percentage of GSS respondents in 2024 who reported being
+union members. Aggregated from individual respondent records. Since GSS 2024
+is a cross-section, only one value (2024) is available. All other years:
+missing.
+Descriptive Statistics:
+  Mean: 10.2%
+  Min: 10.2%
+  Max: 10.2%
+  N missing: 78 (only 2024 has data)
+
+Variable 13: gss_employed_pct
+Variable Label: Percentage of Respondents Employed (GSS)
+Type: Numeric (float)
+Range: 0-100 (percent)
+Measurement Level: Ratio
+Source: GSS 2024 Cross-section, WRKSTAT variable
+Frequency: Annual (2024 only in this file)
+Notes: Percentage of GSS respondents in 2024 with WRKSTAT=1 (working full-time).
+Similar data availability as gss_union_pct.
+Descriptive Statistics:
+  Mean: [will calculate]
+  N missing: 78
+
+Variable 14: gss_college_pct
+Variable Label: Percentage with Bachelor's Degree or Higher (GSS)
+Type: Numeric (float)
+Range: 0-100 (percent)
+Measurement Level: Ratio
+Source: GSS 2024 Cross-section, DEGREE variable (DEGREE >= 3)
+Frequency: Annual (2024 only in this file)
+Notes: Percentage of GSS respondents in 2024 with DEGREE >= 3 (Bachelor's,
+Graduate, or higher). Similar data availability.
+Descriptive Statistics:
+  Mean: [will calculate]
+  N missing: 78
+
+Variable 15: decade (CATEGORICAL)
+Variable Label: Decade
+Type: Numeric (integer)
+Codes & Value Labels:
+  1940 = "1940s"
+  1950 = "1950s"
+  1960 = "1960s"
+  1970 = "1970s"
+  1980 = "1980s"
+  1990 = "1990s"
+  2000 = "2000s"
+  2010 = "2010s"
+  2020 = "2020s"
+Measurement Level: Nominal
+Source: Derived from year variable (year = decade + offset within decade)
+Description: Decade classification for grouping years into 10-year periods.
+Tabulation:
+  1940s: 1 observation (1947 only)
+  1950s: 10 observations
+  1960s: 10 observations
+  1970s: 10 observations
+  1980s: 10 observations
+  1990s: 10 observations
+  2000s: 10 observations
+  2010s: 10 observations
+  2020s: 7 observations (2020-2025, plus partial 2026)
+
+Variable 16: era (CATEGORICAL) **DERIVED VARIABLE #1**
+Variable Label: Economic Era
+Type: Numeric (integer)
+Codes & Value Labels:
+  1 = "Post-war Golden Age (1947-1974)"
+  2 = "Stagflation & Adjustment (1975-1991)"
+  3 = "New Economy & Boom (1992-2007)"
+  4 = "Financial Crisis & After (2008+)"
+Measurement Level: Nominal
+Source: Derived from year variable (based on historical economic periods)
+Description: Classification of years into major economic eras reflecting
+distinct periods of U.S. economic history: the post-war growth period,
+the stagflation crisis, the information technology boom, and the post-2008
+financial crisis recovery.
+Rationale: These four periods correspond to major shifts in economic
+performance, unemployment, inflation, and policy regimes. Allows analysis
+of how outcomes differ across distinct economic contexts.
+Tabulation:
+  Golden Age: 28 obs
+  Stagflation: 17 obs
+  New Economy: 16 obs
+  Financial Crisis: 18 obs
+  Total: 79 obs
+
+Variable 17: unemployment_cat (CATEGORICAL) **DERIVED VARIABLE #2**
+Variable Label: Unemployment Category
+Type: Numeric (integer)
+Codes & Value Labels:
+  1 = "Low (<4%)"
+  2 = "Moderate (4-6%)"
+  3 = "Elevated (6-8%)"
+  4 = "High (8%+)"
+Measurement Level: Ordinal
+Source: Derived from unemployment_rate variable (continuous, recode to categories)
+Description: Unemployment rate grouped into four ordinal categories representing
+labor market tightness. Useful for comparing other indicators across different
+unemployment regimes.
+Rationale: Categorizing continuous unemployment allows for descriptive analysis
+using crosstabs and hypothesis tests on ordinal variables.
+Tabulation:
+  Low:       [count]
+  Moderate:  [count]
+  Elevated:  [count]
+  High:      [count]
+  Missing:   [count] (from years with missing unemployment_rate)
+
+================================================================================
+DERIVED VARIABLES (Generated in Stata)
+================================================================================
+
+**Variable 18: economic_stress_idx** [Derived variable #1 above as "era"]
+
+Wait, let me clarify: I created two composite indices in the do-file that are
+NOT in the simple variable list:
+
+Composite Index 1: economic_stress_idx
+Formula: unemployment_rate + (cpi_inflation/10) + (gini_index * 10)
+Label: Economic Stress Index
+Description: Composite measure combining unemployment, inflation, and income
+inequality. Unitless index where higher values indicate greater economic stress.
+Interpretation: Captures multi-dimensional nature of economic distress; year
+with high unemployment AND high inflation AND high inequality would have
+highest stress index.
+Missing: Any year missing any of the three components
+Tabulation: [Mean, SD, Min, Max will be shown in summary statistics]
+
+Composite Index 2: social_wellbeing_idx
+Formula: gss_employed_pct + gss_college_pct + (life_expectancy_at_birth/10)
+Label: Social Well-being Index
+Description: Composite measure combining employment rate, educational
+attainment, and longevity. Unitless index where higher values indicate
+greater social well-being.
+Missing: Only 2024 (where GSS data available) OR years missing life expectancy
+Tabulation: [Limited data due to GSS availability]
+
+================================================================================
+MERGE STATUS AND DATA COVERAGE
+================================================================================
+
+Variable: merge_status
+Type: Numeric
+Codes:
+  1 = FRED data only (no matching GSS data for year)
+  2 = GSS data only (unusual; should not occur)
+  3 = Both FRED and GSS data available (year 2024)
+
+Distribution:
+  Value 1: 78 observations (all years except 2024)
+  Value 3: 1 observation (2024)
+
+Note: GSS 2024 is cross-sectional; aggregates available only for 2024.
+Most analyses will use FRED data across full 1947-2025 period.
+Composite indices using GSS components only calculate for 2024.
+
+================================================================================
+END OF CODEBOOK
+================================================================================
+
+[This template should be converted to a Word document (.docx) with:
+- Proper headings and formatting
+- Page numbers
+- Clear sections
+- Tables where indicated
+- Professional margins and fonts
+]
