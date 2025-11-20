@@ -129,7 +129,7 @@ twoway (line UNEMPLOYMENT_RATE year, lwidth(medium) lcolor(navy)), ///
     xtitle("Year") ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/unemployment_trend.png", replace width(1000)
+graph export "unemployment_trend.png", replace width(1000)
 
 * Graph 2: Life Expectancy Over Time
 twoway (line LIFE_EXPECTANCY_AT_BIRTH year if !missing(LIFE_EXPECTANCY_AT_BIRTH), ///
@@ -139,7 +139,7 @@ twoway (line LIFE_EXPECTANCY_AT_BIRTH year if !missing(LIFE_EXPECTANCY_AT_BIRTH)
     xtitle("Year") ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/life_expectancy_trend.png", replace width(1000)
+graph export "life_expectancy_trend.png", replace width(1000)
 
 * Graph 3: Income Inequality Over Time
 twoway (line GINI_INDEX year if !missing(GINI_INDEX), ///
@@ -149,7 +149,7 @@ twoway (line GINI_INDEX year if !missing(GINI_INDEX), ///
     xtitle("Year") ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/gini_index_trend.png", replace width(1000)
+graph export "gini_index_trend.png", replace width(1000)
 
 * Graph 4: Economic Stress Index Over Time
 twoway (line econ_stress year if !missing(econ_stress), ///
@@ -159,7 +159,7 @@ twoway (line econ_stress year if !missing(econ_stress), ///
     xtitle("Year") ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/economic_stress_trend.png", replace width(1000)
+graph export "economic_stress_trend.png", replace width(1000)
 
 * Graph 5: Box Plot - Unemployment by Decade
 graph box UNEMPLOYMENT_RATE, over(decade) ///
@@ -167,7 +167,7 @@ graph box UNEMPLOYMENT_RATE, over(decade) ///
     ytitle("Unemployment Rate (%)") ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/unemployment_by_decade.png", replace width(1000)
+graph export "unemployment_by_decade.png", replace width(1000)
 
 * Graph 6: Income vs. Life Expectancy
 twoway (line REAL_MEDIAN_HH_INCOME year if !missing(REAL_MEDIAN_HH_INCOME), ///
@@ -181,7 +181,7 @@ twoway (line REAL_MEDIAN_HH_INCOME year if !missing(REAL_MEDIAN_HH_INCOME), ///
     legend(order(1 "Income" 2 "Life Expectancy")) ///
     graphregion(color(white)) ///
     plotregion(color(white))
-graph export "/Users/tuckerpeters/Downloads/income_vs_lifeexp.png", replace width(1000)
+graph export "income_vs_lifeexp.png", replace width(1000)
 
 display "All visualizations created successfully"
 display _newline(2)
